@@ -16,12 +16,10 @@ public:
 	GuessResult guess(const string& guessNumber) {
 		assertIllegalArgument(guessNumber);
 
-		if (guessNumber == question_)
-			return { true, QUESTION_LENGTH, 0 };
+		if (guessNumber != question_)
+			return getUnsolvedScore(guessNumber);
 		
-		int strikes = countStrikes(guessNumber);
-		int balls = countBalls(guessNumber);
-		return { false, strikes, balls };
+		return getSolvedScore();
 	}
 	void assertIllegalArgument(const string& guessNumber)
 	{
@@ -44,6 +42,12 @@ public:
 			|| guessNumber[1] == guessNumber[2];
 	}
 
+	const GuessResult& getUnsolvedScore(const std::string& guessNumber)
+	{
+		int strikes = countStrikes(guessNumber);
+		int balls = countBalls(guessNumber);
+		return { false, strikes, balls };
+	}
 	int countStrikes(const string& guessNumber) {
 		int result = 0;
 
@@ -61,17 +65,21 @@ public:
 
 		for (int i = 0; i < QUESTION_LENGTH; ++i) {
 			for (int j = 0; j < QUESTION_LENGTH; ++j) {
-				if (i == j)
-					continue;
-
-				if (guessNumber[i] != question_[j])
+				if (i == j
+					|| guessNumber[i] != question_[j])
 					continue;
 
 				result++;
+				break;
 			}
 		}
 
 		return result;
+	}
+	
+	const GuessResult& getSolvedScore()
+	{
+		return { true, QUESTION_LENGTH, 0 };
 	}
 private:
 	const int QUESTION_LENGTH = 3;
