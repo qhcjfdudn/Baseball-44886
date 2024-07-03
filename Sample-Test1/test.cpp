@@ -21,4 +21,5 @@ public:
 TEST_F(BaseballFixture, ThrowExceptionWhenInvalidCase) {
 	assertIllegalArgument(string("12"));	// length_error
 	assertIllegalArgument(string("12s"));	// invalid_argument
+	assertIllegalArgument(string("121"));	// invalid_argument
 }
