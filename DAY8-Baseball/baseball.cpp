@@ -17,9 +17,10 @@ public:
 		assertIllegalArgument(guessNumber);
 
 		if (guessNumber == question_)
-			return { true, 3, 0 };
+			return { true, QUESTION_LENGTH, 0 };
 		
-		return { false, 2, 0 };
+		int strikes = countStrikes(guessNumber);
+		return { false, strikes, 0 };
 	}
 	void assertIllegalArgument(const string& guessNumber)
 	{
@@ -42,6 +43,20 @@ public:
 			|| guessNumber[1] == guessNumber[2];
 	}
 
+	int countStrikes(const string& guessNumber) {
+		int result = 0;
+
+		for (int i = 0; i < QUESTION_LENGTH; ++i) {
+			if (guessNumber[i] != question_[i])
+				continue;
+
+			result++;
+		}
+
+		return result;
+	}
+
 private:
+	const int QUESTION_LENGTH = 3;
 	string question_;
 };
